@@ -57,11 +57,6 @@ jobs:
           if: steps.plan.outcome == 'failure'
           run: exit 1
 
-        - name: Import existing KMS alias
-          run: |
-            terraform import 'module.eks.module.kms.aws_kms_alias.this["cluster"]' alias/eks/vprofile-eks
-          continue-on-error: true
-
         - name: Terraform Apply
           id: apple
           if: github.ref == 'refs/heads/main' && github.event_name == 'push'
