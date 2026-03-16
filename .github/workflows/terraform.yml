@@ -24,6 +24,9 @@ jobs:
   terraform:
     name: "Terraform Plan and Apply"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
@@ -35,22 +38,18 @@ jobs:
 
       - name: "Terraform Init"
         id: init
-        working-directory: ./terraform
         run: terraform init --backend-config="bucket=${{ secrets.BUCKET_TF_STATE }}" -backend-config="key=terraform.tfstate" -backend-config="region=${{ env.AWS_REGION }}"
 
       - name: "Terraform format"
         id: fmt
-        working-directory: ./terraform
         run: terraform fmt -check
       
       - name: "Terraform Validate"
         id: validate
-        working-directory: ./terraform
         run: terraform validate
 
       - name: "Terraform Plan"
         id: plan
-        working-directory: ./terraform
         run: terraform plan -no-color -input=false -out=tfplan
         continue-on-error: true
       
