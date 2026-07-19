@@ -16,7 +16,7 @@ module "eks" {
 
     github_actions = {
 
-      principal_arn = "arn:aws:iam::579275327561:user/final"
+      principal_arn = var.github_principal_arn
 
       policy_associations = {
 

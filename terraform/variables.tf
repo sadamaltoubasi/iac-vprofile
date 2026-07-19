@@ -10,4 +10,10 @@ variable "clusterName" {
   default     = "vprofile-eks"
 }
 
+
+variable "github_principal_arn" {
+  type        = string
+  description = "GitHub Actions IAM principal ARN passed from GitHub Secrets"
+}
+
 ########
