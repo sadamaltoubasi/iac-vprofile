@@ -9,6 +9,34 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets
 
   cluster_endpoint_public_access = true
+  cluster_enabled_log_types      = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+
+  cluster_addons = {
+    amazon-cloudwatch-observability = {
+      most_recent = true
+    }
+    vpc-cni = {
+      before_compute = true
+      most_recent    = true
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    coredns = {
+      most_recent = true
+    }
+  }
+
+
+  eks_managed_node_group_defaults = {
+
+    ami_type = "AL2023_x86_64_STANDARD"
+    iam_role_additional_policies = {
+      CloudWatchAgentServerPolicy  = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+      AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    }
+
+  }
 
 
   # Allow GitHub Actions IAM identity to access Kubernetes
@@ -33,13 +61,6 @@ module "eks" {
       }
 
     }
-
-  }
-
-
-  eks_managed_node_group_defaults = {
-
-    ami_type = "AL2023_x86_64_STANDARD"
 
   }
 
